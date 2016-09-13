@@ -94,6 +94,12 @@ type userListParams struct {
 	TagID     string `url:"tag_id,omitempty"`
 }
 
+type userScrollParams struct {
+	Scroll    string `url:"scroll_param,omitempty"`
+	SegmentID string `url:"segment_id,omitempty"`
+	TagID     string `url:"tag_id,omitempty"`
+}
+
 // FindByID looks up a User by their Intercom ID.
 func (u *UserService) FindByID(id string) (User, error) {
 	return u.findWithIdentifiers(UserIdentifiers{ID: id})
@@ -130,7 +136,11 @@ func (u *UserService) ListByTag(tagID string, params PageParams) (UserList, erro
 
 // Scroll lists all Users for App.
 func (u *UserService) Scroll(scrollParam string) (UserScroll, error) {
-	return u.Repository.scroll(scrollParam)
+	return u.Repository.scroll(userScrollParams{Scroll: scrollParam})
+}
+
+func (u *UserService) ScrollBySegment(segmentID string, scrollParam string) (UserScroll, error) {
+	return u.Repository.scroll(userScrollParams{SegmentID: segmentID, Scroll: scrollParam})
 }
 
 // Save a User, creating or updating them.

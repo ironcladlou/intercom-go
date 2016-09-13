@@ -12,7 +12,7 @@ import (
 type UserRepository interface {
 	find(UserIdentifiers) (User, error)
 	list(userListParams) (UserList, error)
-	scroll(scrollParam string) (UserScroll, error)
+	scroll(userScrollParams) (UserScroll, error)
 	save(*User) (User, error)
 	delete(id string) (User, error)
 }
@@ -63,10 +63,10 @@ func (api UserAPI) list(params userListParams) (UserList, error) {
 	return userList, err
 }
 
-func (api UserAPI) scroll(scrollParam string) (UserScroll, error) {
+func (api UserAPI) scroll(params userScrollParams) (UserScroll, error) {
 	userScroll := UserScroll{}
 
-	data, err := api.httpClient.Get("/users/scroll", ScrollParams{Param: scrollParam})
+	data, err := api.httpClient.Get("/users/scroll", params)
 	if err != nil {
 		return userScroll, err
 	}
